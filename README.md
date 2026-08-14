@@ -45,15 +45,25 @@ Run the ETL script:
 python etl.py
 ```
 
+By default, port/country names are translated to Korean. To get English output instead, pass `--lang`:
+
+```bash
+python etl.py --lang english
+```
+
+Supported values: `korean` (default), `english`.
+
 ## Output
 
-The cleaned and merged data will be saved in a subdirectory within `data/cleaned/`, named after the date range (e.g., `data/cleaned/japan_isa_nationality_by_airport_202507-202510/`).
+The cleaned and merged data will be saved in a subdirectory within `data/cleaned/`, named after the date range and selected language (e.g., `data/cleaned/japan_isa_nationality_by_airport_202507-202510_korean/`).
 
 Inside that folder, you will find 4 files:
-- `japan_isa_nationality_by_airport_YYYYMM-YYYYMM_wide.csv`
-- `japan_isa_nationality_by_airport_YYYYMM-YYYYMM_wide.parquet`
-- `japan_isa_nationality_by_airport_YYYYMM-YYYYMM_long.csv`
-- `japan_isa_nationality_by_airport_YYYYMM-YYYYMM_long.parquet`
+- `japan_isa_nationality_by_airport_YYYYMM-YYYYMM_<lang>_wide.csv`
+- `japan_isa_nationality_by_airport_YYYYMM-YYYYMM_<lang>_wide.parquet`
+- `japan_isa_nationality_by_airport_YYYYMM-YYYYMM_<lang>_long.csv`
+- `japan_isa_nationality_by_airport_YYYYMM-YYYYMM_<lang>_long.parquet`
+
+> Note: the English port dictionary currently covers fewer smaller regional airports than the Korean one. Any name without a translation is left in the original Japanese and a summary count is logged as a warning.
 
 ## Logging
 

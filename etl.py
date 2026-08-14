@@ -1,4 +1,5 @@
 import pandas as pd
+import argparse
 import json
 import os
 import re
@@ -34,6 +35,17 @@ def setup_logging():
         ]
     )
     logging.info(f"Logging started. Log file: {log_file}")
+
+# --- CLI Arguments ---
+def parse_args():
+    parser = argparse.ArgumentParser(description="Clean and merge Japan ISA statistics data.")
+    parser.add_argument(
+        "--lang",
+        choices=["korean", "english"],
+        default="korean",
+        help="Output language for translated port/country names (default: korean)."
+    )
+    return parser.parse_args()
 
 # --- Helper Functions (Ported from oldcode) ---
 
@@ -139,14 +151,15 @@ def organize_raw_data():
     
     logging.info(f"Moved {len(valid_files)} files to {target_dir}.")
 
-def clean_data():
+def clean_data(lang="korean"):
     """Iterates over all excel files in RAW_DIR (recursive), cleans them, and saves to TEMP_DIR."""
     os.makedirs(TEMP_DIR, exist_ok=True)
-    
+
     # Load Dicts
     trans_dicts = load_translation_dicts(CONFIG_DIR)
-    port_dict, country_dict = trans_dicts["korean"] # Defaulting to Korean as per legacy code
-    
+    port_dict, country_dict = trans_dicts[lang]
+    untranslated_count = 0
+
     # Find all files recursively
     all_files = glob(os.path.join(RAW_DIR, "**", "*.xls*"), recursive=True)
     # Filter out files in TEMP_DIR or CLEANED_DIR if they are somehow inside RAW_DIR (unlikely but safe)
@@ -187,10 +200,13 @@ def clean_data():
             # Dictionary Normalization
             port_norm = {k.replace("\n", "").replace("　", "").replace(" ", "").strip(): v for k, v in port_dict.items()}
             translated_cols = [port_norm.get(c, c) for c in filtered_cols]
-            
+            untranslated_count += sum(1 for c in filtered_cols if c not in port_norm)
+
             # Rows (Countries)
             raw_rows = df.iloc[row_start:, row_col]
-            translated_rows = [country_dict.get(str(r).strip(), str(r).strip()) for r in raw_rows]
+            raw_rows_stripped = [str(r).strip() for r in raw_rows]
+            translated_rows = [country_dict.get(r, r) for r in raw_rows_stripped]
+            untranslated_count += sum(1 for r in raw_rows_stripped if r not in country_dict)
             
             # Trim & Construct
             df_trimmed = df.iloc[row_start:, col_start:]
@@ -230,8 +246,10 @@ def clean_data():
             continue
             
     logging.info(f"Successfully cleaned and saved {processed_count} files to temporary storage.")
+    if untranslated_count:
+        logging.warning(f"{untranslated_count} port/country names had no '{lang}' translation and were left untranslated.")
 
-def merge_data():
+def merge_data(lang="korean"):
     """Merges all parquet files in TEMP_DIR and saves output."""
     temp_files = glob(os.path.join(TEMP_DIR, "*.parquet"))
     if not temp_files:
@@ -293,7 +311,7 @@ def merge_data():
         start_str, end_str = "unknown", "unknown"
 
     os.makedirs(CLEANED_DIR, exist_ok=True)
-    base_name = f"japan_isa_nationality_by_airport_{start_str}-{end_str}"
+    base_name = f"japan_isa_nationality_by_airport_{start_str}-{end_str}_{lang}"
     
     # Create subdirectory for this specific output
     output_subdir = os.path.join(CLEANED_DIR, base_name)
@@ -339,13 +357,15 @@ def merge_data():
     logging.info("Etl process completed successfully.")
 
 def main():
+    args = parse_args()
     setup_logging()
     logging.info("Starting ETL process...")
-    
+    logging.info(f"Output language: {args.lang}")
+
     try:
         organize_raw_data()
-        clean_data()
-        merge_data()
+        clean_data(args.lang)
+        merge_data(args.lang)
     except Exception as e:
         logging.critical(f"ETL process failed: {e}", exc_info=True)
 
