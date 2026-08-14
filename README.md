@@ -2,6 +2,10 @@
 
 A tool to clean and merge Japanese Immigration Services Agency (ISA) statistics data.
 
+Source data: [Monthly Japan Immigration Service Agency (ISA) Statistics](https://www.e-stat.go.jp/stat-search/files?page=1&layout=datalist&toukei=00250011&tstat=000001012480&cycle=1&tclass1=000001012481&cycle_facet=tclass1&tclass2val=0&metadata=1&data=1)
+- For accessing "Nationality and Region of Foreigners Arriving at Each Port" tables (which identifies specific airports/ports of entry), access data with the suffix "-01-2" I(e.g., Data for December 2025 would be "25-12-01-2")
+- Download and place the excel data in the repository's data/raw/ directory. For timeseries analysis, i usually create a subdirectory that contains multiple data files for different months (e.g., data/raw/202601-202512)
+
 ## Features
 - **Raw Data Organization**: Automatically organizes loose `.xls` and `.xlsx` files into date-range folders.
 - **Cleaning**: Translates ports and countries from Japanese using provided dictionaries.
