@@ -206,13 +206,13 @@ of code gets written.
 
 ## Research / Showcase
 
-This repository's output was used to compile the statistics behind:
+This repository's output was used to (partially) compile the statistics behind:
 
 - **Yanolja Research Brief Vol.11**, *"Opening the Gate to Regional Tourism: How Japan
   Turned Regional Airports into Inbound Engines"* —
   https://www.yanolja-research.com/brief/view/695?lang=en
-- **Regional Airport Revitalization: Northeast Asia Air Network Analysis and Lessons
-  from Japan** — https://www.yanolja-research.com/report/view/736?lang=en
+- **Yanolja Research Report Vol.6**, *Regional Airport Revitalization: Northeast Asia Air Network Analysis and Lessons
+  from Japan* — https://www.yanolja-research.com/report/view/736?lang=en
   (Korean only)
 
 Shared here as a real-world use case, in hopes that other researchers might find this
