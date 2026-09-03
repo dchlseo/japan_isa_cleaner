@@ -38,7 +38,13 @@ def setup_logging():
 
 # --- CLI Arguments ---
 def parse_args():
-    parser = argparse.ArgumentParser(description="Clean and merge Japan ISA statistics data.")
+    parser = argparse.ArgumentParser(
+        description=(
+            "Clean and merge Japan's monthly 'nationality x port of entry' "
+            "Immigration Control Statistics (出入国管理統計) table into CSV/Parquet. "
+            "See README.md for the specific e-Stat table this supports."
+        )
+    )
     parser.add_argument(
         "--lang",
         choices=["korean", "english"],
