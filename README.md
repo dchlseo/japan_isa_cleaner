@@ -117,7 +117,13 @@ By default, port/country names are translated to Korean. To get English output i
 python etl.py --lang english
 ```
 
-Supported values: `korean` (default), `english`.
+To keep port/country names in their original, untranslated Japanese, pass `--lang japanese`:
+
+```bash
+python etl.py --lang japanese
+```
+
+Supported values: `korean` (default), `english`, `japanese`.
 
 ## Language Support
 
@@ -130,6 +136,9 @@ Supported values: `korean` (default), `english`.
   `configs/` (`japanese_to_korean_ports.json`, `japanese_to_english_ports.json`,
   and the corresponding `*_countries.json` files). There is no fuzzy matching or
   automated translation — only exact-string lookup.
+- **`japanese` is fully supported by definition** — it's a passthrough that
+  leaves port/country names exactly as they appear in the source data, so
+  there's no coverage gap the way there is for Korean/English translation.
 
 **Do not assume full multilingual support.** If you need a name that isn't yet in the
 selected language's dictionary, either add it to the relevant JSON file or expect it

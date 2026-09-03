@@ -47,9 +47,12 @@ def parse_args():
     )
     parser.add_argument(
         "--lang",
-        choices=["korean", "english"],
+        choices=["korean", "english", "japanese"],
         default="korean",
-        help="Output language for translated port/country names (default: korean)."
+        help=(
+            "Output language for translated port/country names (default: korean). "
+            "'japanese' leaves names untranslated in their original Japanese."
+        )
     )
     return parser.parse_args()
 
@@ -70,6 +73,9 @@ def load_translation_dicts(dict_dir):
         return {
             "korean": (jp_to_kr_ports, jp_to_kr_countries),
             "english": (jp_to_en_ports, jp_to_en_countries),
+            # No translation needed: names already are Japanese, so an empty
+            # dict is a passthrough (lookups fall back to the original string).
+            "japanese": ({}, {}),
         }
     except Exception as e:
         logging.error(f"Failed to load translation dictionaries: {e}")
@@ -252,7 +258,7 @@ def clean_data(lang="korean"):
             continue
             
     logging.info(f"Successfully cleaned and saved {processed_count} files to temporary storage.")
-    if untranslated_count:
+    if untranslated_count and lang != "japanese":
         logging.warning(f"{untranslated_count} port/country names had no '{lang}' translation and were left untranslated.")
 
 def merge_data(lang="korean"):
