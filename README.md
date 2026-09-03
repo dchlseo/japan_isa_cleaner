@@ -1,4 +1,4 @@
-# Japan ISA Cleaner
+# Japan ISA Cleaner (Immigration Services Agency Statistics; 出入国管理統計)
 
 A small ETL tool that cleans and merges one specific Japanese government statistics
 table — monthly foreign arrivals by **nationality × port of entry** — into tidy,
@@ -194,6 +194,20 @@ general-purpose tool would need. Issues and PRs are welcome, especially around
 English translation coverage or supporting additional e-Stat tables — please open an
 issue first for anything beyond a small fix, so scope can be discussed before a lot
 of code gets written.
+
+## Research / Showcase
+
+This repository's output was used to compile the statistics behind:
+
+- **Yanolja Research Brief Vol.11**, *"Opening the Gate to Regional Tourism: How Japan
+  Turned Regional Airports into Inbound Engines"* —
+  https://www.yanolja-research.com/brief/view/695?lang=en
+- **Regional Airport Revitalization: Northeast Asia Air Network Analysis and Lessons
+  from Japan** — https://www.yanolja-research.com/report/view/736?lang=en
+  (Korean only)
+
+Shared here as a real-world use case, in hopes that other researchers might find this
+pipeline useful and contribute to it.
 
 ## License
 
